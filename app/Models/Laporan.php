@@ -20,4 +20,9 @@ class Laporan extends Model
         'gambar',
         'sentiment',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 }
