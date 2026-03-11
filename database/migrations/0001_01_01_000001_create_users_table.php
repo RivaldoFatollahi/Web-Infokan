@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_role');
             $table->foreign('id_role')->references('id')->on('role');
 
-            $table->unsignedBigInteger('id_rumah');
+            $table->unsignedBigInteger('id_rumah')->unique();
             $table->foreign('id_rumah')->references('id')->on('rumah');
             $table->string('nama');
             $table->string('email')->unique();
