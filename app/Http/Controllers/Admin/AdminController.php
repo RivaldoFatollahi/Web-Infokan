@@ -13,10 +13,18 @@ class AdminController
     {
         $totalUsers = User::count();
         $totalReports = Laporan::count();
-        $totalReports = Rumah::count();
+        $totalHouses = Rumah::count();
         $totalPengumuman = Pengumuman::count();
-        
 
-        return view('dashboard', compact('totalUsers', 'totalReports'));
+        $reports = Laporan::latest()->take(5)->get();
+
+        // dd($reports);
+
+         return view('admin.dashboard', compact(
+        'totalUsers',
+        'totalHouses',
+        'totalReports',
+        'reports'
+    ));
     }
 }

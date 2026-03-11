@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        <img src="{{ asset('images/logo-infokan.png') }}" alt="Logo" class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
 
@@ -15,10 +15,22 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    
-                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                        {{ __('Home') }}
+                    <x-nav-link :href="route('houses')" :active="request()->routeIs('houses')">
+                        {{ __('Rumah-Rumah') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('reports')" :active="request()->routeIs('reports')">
+                        {{ __('Laporan Warga') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('announcements')" :active="request()->routeIs('announcements')">
+                        {{ __('Pengumuman') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('users')" :active="request()->routeIs('users')">
+                        {{ __('Penduduk') }}
+                    </x-nav-link>
+
+                    {{-- <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
+                        {{ __('Home') }}
+                    </x-nav-link> --}}
                 </div>
             </div>
 
