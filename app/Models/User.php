@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Rumah;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
@@ -18,7 +20,9 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'id_role',
+        'id_rumah',
+        'nama',
         'email',
         'password',
     ];
@@ -41,8 +45,17 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function rumah()
+    {
+        return $this->belongsTo(Rumah::class, 'id_rumah');
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class. 'id_role');
     }
 }
