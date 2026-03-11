@@ -5,8 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('home');
+})->name('home');
+
+Route::get('/laporan', function () {
+    return view('home');
+})->name('laporan');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
