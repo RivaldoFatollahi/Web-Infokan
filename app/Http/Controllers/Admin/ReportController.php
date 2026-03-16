@@ -14,11 +14,13 @@ class ReportController
 
         $reports = Laporan::latest()->take(5)->get();
 
-        // dd($reports);
+        dd($reports);
 
-         return view('admin.reports.index', compact(
-        'totalReports',
-        'reports'
-    ));
+        return view('admin.reports.index', compact(
+            'totalReports',
+            'reports'
+        ));
+
+        return view('home', compact('reports'));
     }
 }

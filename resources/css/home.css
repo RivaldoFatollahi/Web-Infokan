@@ -1,0 +1,77 @@
+:root {
+    --primary: #0096D6;
+    --primary-light: #4EB8E5;
+    --primary-dark: #1A4F73;
+    --accent: #0077B6;
+    --white: #FFFFFF;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+}
+
+/* Custom Styles */
+.badge-sentimen {
+    @apply text-xs px-2 py-1 rounded-full font-medium;
+}
+
+.badge-positif {
+    background-color: #10B98120;
+    color: #059669;
+}
+
+.badge-netral {
+    background-color: #6B728020;
+    color: #4B5563;
+}
+
+.badge-negatif {
+    background-color: #EF444420;
+    color: #DC2626;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    @apply text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+    background: transparent;
+    border: 2px solid var(--primary);
+    @apply text-[#0096D6] px-6 py-2 rounded-lg font-medium hover:shadow-lg transition-all duration-300;
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    transform: translateY(-1px);
+    color: var(--white);
+}
+
+.card-laporan {
+    transition: all 0.3s ease;
+    border: 1px solid #E5E7EB;
+}
+
+.card-laporan:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 150, 214, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-color: var(--primary-light);
+}
+
+.slider-dot {
+    @apply w-2 h-2 rounded-full mx-1 cursor-pointer transition-all duration-300;
+    background-color: #D1D5DB;
+}
+
+.slider-dot.active {
+    background-color: var(--primary);
+    width: 24px;
+}
+
+.filter-btn.active{
+    background: var(--primary);
+    color:white;
+}
