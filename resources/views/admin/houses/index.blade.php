@@ -2,12 +2,12 @@
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <h2 class="fw-bold fs-4 mb-0">
-                Penduduk
+                Rumah - Rumah
             </h2>
 
-            <a href="" class="btn btn-primary btn-sm">
+            <button onclick="openModal()" class="btn btn-primary btn-sm">
                 + Tambah Rumah
-            </a>
+            </button>
         </div>
     </x-slot>
 
@@ -35,41 +35,86 @@
                     <tbody>
 
                         @forelse($Houses ?? [] as $house)
-                        <tr>
-                            <td class="fw-semibold">
-                                {{ $house->no_rumah }}
-                            </td>
+                            <tr>
+                                <td class="fw-semibold">
+                                    {{ $house->no_rumah }}
+                                </td>
 
-                            <td>
-                                {{ $house->pemilik_rumah }}
-                            </td>
+                                <td>
+                                    {{ $house->pemilik_rumah }}
+                                </td>
 
-                            <td>
-                                {{ $house->alamat ?? '-' }}
-                            </td>
+                                <td>
+                                    {{ $house->alamat ?? '-' }}
+                                </td>
 
-                            <td>
-                                <a href="" class="btn btn-sm btn-warning">
-                                    Edit
-                                </a>
+                                <td>
+                                    <button onclick="editModal({{ json_encode($house) }})"
+                                        class="btn btn-sm btn-warning">
+                                        Edit
+                                    </button>
 
-                                <a href="" class="btn btn-sm btn-danger">
-                                    Hapus
-                                </a>
-                            </td>
-                        </tr>
+                                    <button onclick="deleteModal({{ $house->id }})" class="btn btn-sm btn-danger">
+                                        Hapus
+                                    </button>
+                                </td>
+                            </tr>
                         @empty
-                        <tr>
-                            <td colspan="4" class="text-center py-4 text-muted">
-                                Belum ada data Rumah
-                            </td>
-                        </tr>
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">
+                                    Belum ada data Rumah
+                                </td>
+                            </tr>
                         @endforelse
 
                     </tbody>
                 </table>
             </div>
         </div>
-
     </div>
+
+    @push('scripts')
+        <script src="{{ asset('js/crudHelper.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            function openModal() {
+                CrudHelper.showForm({
+                    title: 'Tambah Rumah',
+                    url: '/admin/houses',
+                    method: 'POST',
+                    html: `
+                <div class="text-start px-2">
+                    <label class="small fw-bold">Nomor Rumah</label>
+                    <input id="no_rumah" class="form-control mb-2">
+                    <label class="small fw-bold">Pemilik Rumah</label>
+                    <input id="pemilik_rumah" type="text" class="form-control mb-2">
+                    <label class="small fw-bold">Alamat</label>
+                    <input id="alamat" type="text" class="form-control mb-2">
+                </div>`
+                });
+            }
+
+            function editModal(house) {
+                CrudHelper.showForm({
+                    title: 'Edit Penduduk',
+                    url: `/admin/houses/${house.id}`,
+                    method: 'PUT',
+                    html: `
+                    <div class="text-start px-2">
+                    <label class="small fw-bold">Nomor Rumah</label>
+                    <input id="no_rumah" type="text" class="form-control mb-2" value="${house.no_rumah}">
+                    <label class="small fw-bold">Pemilik Rumah</label>
+                    <input id="pemilik_rumah" type="text" class="form-control mb-2" value="${house.pemilik_rumah}">
+                    <label class="small fw-bold">Alamat</label>
+                    <input id="alamat" type="text" class="form-control mb-2" value="${house.alamat}">
+                </div>`
+                });
+            }
+
+            function deleteModal(id) {
+                CrudHelper.confirmDelete(`/admin/houses/${id}`);
+            }
+        </script>
+    @endpush
 </x-app-layout>

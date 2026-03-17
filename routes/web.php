@@ -24,12 +24,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-    Route::get('/announcements', [AnnouncementController::class, 'dashboard'])->name('announcements');
-    Route::get('/houses', [HouseController::class, 'houses'])->name('houses');
-    Route::get('/users', [UserController::class, 'users'])->name('users');
-    Route::get('/reports', [ReportController::class, 'reports'])->name('reports');
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::resource('/announcements', AnnouncementController::class)->names('announcements');
+    Route::resource('/houses', HouseController::class)->names('houses');
+    Route::resource('/users', UserController::class)->names('users');
+    Route::resource('/reports', ReportController::class)->names('reports');
 });
 
 require __DIR__ . '/auth.php';

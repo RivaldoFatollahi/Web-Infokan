@@ -5,9 +5,9 @@
                 Pengumuman
             </h2>
 
-            <a href="" class="btn btn-primary btn-sm">
+            <button onclick="openModal()" class="btn btn-primary btn-sm">
                 Buat Pengumuman
-            </a>
+            </button>
         </div>
     </x-slot>
 
@@ -17,7 +17,7 @@
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
                 <span class="fw-semibold">Daftar User</span>
                 <small class="text-muted">
-                    Total Laporan: {{ $totalPengumuman }}
+                    Total Pengumuman: {{ $totalPengumuman }}
                 </small>
             </div>
 
@@ -39,17 +39,17 @@
                             <tr>
                                 <td>{{ $P->judul }}</td>
                                 <td>{{ $P->kontent }}</td>
-                                <td>{{ $P->gambar ?? '-' }}</td>
+                                <td><img src="{{ asset('storage/' . $P->gambar) }}" width="100"></td>
                                 <td>{{ $P->created_at->format('d M Y') }}</td>
 
                                 <td>
-                                    <a href="" class="btn btn-sm btn-warning">
+                                    <button onclick="editModal({{ json_encode($P) }})" class="btn btn-sm btn-warning">
                                         Edit
-                                    </a>
+                                    </button>
 
-                                    <a href="" class="btn btn-danger btn-sm">
+                                    <button onclick="deleteModal({{ $P->id }})" class="btn btn-danger btn-sm">
                                         Hapus
-                                    </a>
+                                    </button>
                                 </td>
                             </tr>
                         @empty
@@ -64,6 +64,51 @@
                 </table>
             </div>
         </div>
-
     </div>
+
+    @push('scripts')
+        <script src="{{ asset('js/crudHelper.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            function openModal() {
+                CrudHelper.showForm({
+                    title: 'Tambah Pengumuman',
+                    url: '/admin/announcements',
+                    method: 'POST',
+                    html: `
+                <div class="text-start px-2">
+                    <label class="small fw-bold">Judul</label>
+                    <input id="judul" type="text" class="form-control mb-2">
+                    <label class="small fw-bold">Kontent</label>
+                    <input id="kontent" type="text" class="form-control mb-2">
+                    <label class="small fw-bold">Gambar / Foto</label>
+                    <input id="gambar" type="file" class="form-control mb-2" accept="image/*">
+                </div>`
+                });
+            }
+
+            function editModal(P) {
+                CrudHelper.showForm({
+                    title: 'Edit Penduduk',
+                    url: `/admin/announcements/${P.id}`,
+                    method: 'PUT',
+                    html: `
+                    <div class="text-start px-2">
+                    <label class="small fw-bold">Nomor Rumah</label>
+                    <input id="no_rumah" type="text" class="form-control mb-2" value="${P.no_rumah}">
+                    <label class="small fw-bold">Pemilik Rumah</label>
+                    <input id="pemilik_rumah" type="text" class="form-control mb-2" value="${p.pemilik_rumah}">
+                    <label class="small fw-bold">Alamat</label>
+                    <input id="alamat" type="text" class="form-control mb-2" value="${p.alamat}">
+                </div>`
+                });
+            }
+
+            function deleteModal(id) {
+                CrudHelper.confirmDelete(`/admin/announcements/${id}`);
+            }
+        </script>
+    @endpush
+
 </x-app-layout>
