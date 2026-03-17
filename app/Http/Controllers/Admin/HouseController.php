@@ -10,7 +10,7 @@ class HouseController
     {
         $totalHouses = Rumah::count();
 
-        $Houses = Rumah::latest()->take(5)->get();
+        $Houses = Rumah::get();
 
         // dd($Houses);
 

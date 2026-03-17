@@ -9,7 +9,7 @@ class UserController
     public function users()
     {
 
-        $Users = User::latest()->take(5)->get();
+        $Users = User::get();
 
         $totalUsers = User::count();
         // dd($reports);
