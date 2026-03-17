@@ -5,9 +5,9 @@
                 Penduduk
             </h2>
 
-            <a href="" class="btn btn-primary btn-sm">
+            <button onclick="openModal()" class="btn btn-primary btn-sm">
                 + Tambah User
-            </a>
+            </button>
         </div>
     </x-slot>
 
@@ -35,35 +35,34 @@
                     <tbody>
 
                         @forelse($Users ?? [] as $user)
-                        <tr>
-                            <td class="fw-semibold">
-                                {{ $user->nama }}
-                            </td>
+                            <tr>
+                                <td class="fw-semibold">
+                                    {{ $user->nama }}
+                                </td>
 
-                            <td>
-                                {{ $user->email }}
-                            </td>
+                                <td>
+                                    {{ $user->email }}
+                                </td>
 
-                            <td>
-                                {{ $user->rumah->no_rumah ?? '-' }}
-                            </td>
+                                <td>
+                                    {{ $user->rumah->no_rumah ?? '-' }}
+                                </td>
 
-                            <td>
-                                <a href="" class="btn btn-sm btn-warning">
-                                    Edit
-                                </a>
+                                <td>
+                                    <button onclick='editModal(@json($user))'
+                                        class="btn btn-sm btn-warning">Edit</button>
 
-                                <a href="" class="btn btn-sm btn-danger">
-                                    Hapus
-                                </a>
-                            </td>
-                        </tr>
+                                    <button onclick="deleteUser({{ $user->id }})" class="btn btn-sm btn-danger">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
                         @empty
-                        <tr>
-                            <td colspan="4" class="text-center py-4 text-muted">
-                                Belum ada data user
-                            </td>
-                        </tr>
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">
+                                    Belum ada data user
+                                </td>
+                            </tr>
                         @endforelse
 
                     </tbody>
@@ -72,4 +71,72 @@
         </div>
 
     </div>
+
+    @push('scripts')
+        <script src="{{ asset('js/crudHelper.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            function openModal() {
+                CrudHelper.showForm({
+                    title: 'Tambah Penduduk',
+                    url: '/admin/users',
+                    method: 'POST',
+                    html: `
+                <div class="text-start px-2">
+                    <label class="small fw-bold">Nama</label>
+                    <input id="nama" class="form-control mb-2">
+                    <label class="small fw-bold">Email</label>
+                    <input id="email" type="email" class="form-control mb-2">
+                    <label class="small fw-bold">Password</label>
+                    <input id="password" type="password" class="form-control mb-2">
+                    <label class="small fw-bold">Role</label>
+                    <select id="id_role" class="form-select mb-2">
+                        <option value="" disabled selected hidden ></option>
+                        @foreach ($Role as $r) <option value="{{ $r->id }}">{{ $r->role }}</option> @endforeach
+                    </select>
+                    <label class="form-label fw-bold small">No. Rumah</label>
+                     <select id="id_rumah" class="form-select">
+                         <option value="" disabled selected hidden ></option>
+                         @foreach ($Rumah as $R)
+                             <option value="{{ $R->id }}">{{ $R->no_rumah }}</option>
+                        @endforeach
+                     </select>
+                </div>`
+                });
+            }
+
+            function editModal(user) {
+                CrudHelper.showForm({
+                    title: 'Edit Penduduk',
+                    url: `/admin/users/${user.id}`,
+                    method: 'PUT',
+                    html: `
+                <div class="text-start px-2">
+                    <label class="small fw-bold">Nama</label>
+                    <input id="nama" class="form-control mb-2" value="${user.nama}">
+                    <label class="small fw-bold">Email</label>
+                    <input id="email" class="form-control mb-2" value="${user.email}">
+                    <label class="small fw-bold">Role</label>
+                    <select id="id_role" class="form-select mb-2">
+                        @foreach ($Role as $r) <option value="{{ $r->id }}">{{ $r->role }}</option> @endforeach
+                    </select>
+                    <label class="small fw-bold">No Rumah</label>
+                    <select id="id_rumah" class="form-select mb-2">
+                        @foreach ($Rumah as $R) <option value="{{ $R->id }}">{{ $R->no_rumah }}</option> @endforeach
+                    </select>
+                </div>`,
+                    didOpen: () => {
+                        // Pastikan ID 'id_role' ada di dalam html di atas
+                        document.getElementById('id_role').value = user.id_role;
+                    }
+                });
+            }
+
+            function deleteUser(id) {
+                CrudHelper.confirmDelete(`/admin/users/${id}`);
+            }
+        </script>
+    @endpush
+
 </x-app-layout>

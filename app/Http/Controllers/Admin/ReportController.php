@@ -7,7 +7,7 @@ use App\Models\Laporan;
 
 class ReportController
 {
-    public function reports()
+    public function index()
     {
         $totalReports = Laporan::count();
 
@@ -18,7 +18,5 @@ class ReportController
             'totalReports',
             'reports'
         ));
-
-        return view('home', compact('reports'));
     }
 }

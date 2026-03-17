@@ -9,7 +9,7 @@ use App\Models\Rumah;
 
 class AdminController
 {
-    public function dashboard()
+    public function index()
     {
         $totalUsers = User::count();
         $totalReports = Laporan::count();
