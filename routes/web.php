@@ -8,30 +8,28 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AnnouncementController;
 use App\Http\Controllers\Admin\HouseController;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+use App\Http\Controllers\Public\HomeController;
+use App\Http\Controllers\Public\PublicReportController;
 
-Route::get('/laporan', function () {
-    return view('home');
-})->name('laporan');
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth')->group(function () {
+    // Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::post('/reports', [PublicReportController::class, 'store'])->middleware('auth')->name('reports.store');
+    Route::get('/laporan', function () {return view('public-laporan');})->name('laporan');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth','admin'])->prefix('admin')->group(function(){
-    Route::get('/dashboard', [AdminController::class,'dashboard'])->name('dashboard');
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/announcements', [AnnouncementController::class, 'dashboard'])->name('announcements');
     Route::get('/houses', [HouseController::class, 'houses'])->name('houses');
     Route::get('/users', [UserController::class, 'users'])->name('users');
     Route::get('/reports', [ReportController::class, 'reports'])->name('reports');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
