@@ -23,6 +23,7 @@
                     <thead class="table-light">
                         <tr>
                             <th>Judul</th>
+                            <th>Isi Laporan</th>
                             <th>Pelapor</th>
                             <th>Status</th>
                             <th>Tanggal</th>
@@ -35,6 +36,7 @@
                         @forelse($reports ?? [] as $report)
                             <tr>
                                 <td>{{ $report->judul }}</td>
+                                <td>{{ $report->kontent }}</td>
                                 <td>{{ $report->user->nama ?? '-' }}</td>
                                 <td>
                                     <span class="badge bg-warning">

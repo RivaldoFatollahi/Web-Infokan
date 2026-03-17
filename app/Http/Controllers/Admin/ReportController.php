@@ -12,9 +12,7 @@ class ReportController
         $totalReports = Laporan::count();
 
 
-        $reports = Laporan::latest()->take(5)->get();
-
-        dd($reports);
+        $reports = Laporan::get();
 
         return view('admin.reports.index', compact(
             'totalReports',
