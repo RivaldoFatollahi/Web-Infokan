@@ -6,6 +6,9 @@
     --white: #FFFFFF;
     --gray-50: #F9FAFB;
     --gray-100: #F3F4F6;
+    --red: #DC2626;
+    --red-light: #EF4444;
+    --red-dark: #B91C1C;
 }
 
 /* Custom Styles */
@@ -35,6 +38,16 @@
 
 .btn-primary:hover {
     background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--red) 0%, var(--red-light) 100%);
+    @apply text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, var(--red-dark) 0%, var(--red) 100%);
     transform: translateY(-1px);
 }
 

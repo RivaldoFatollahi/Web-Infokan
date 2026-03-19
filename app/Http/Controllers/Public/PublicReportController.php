@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Laporan;
+use Illuminate\Support\Facades\Storage;
 
 class PublicReportController extends Controller
 {
@@ -32,6 +33,41 @@ class PublicReportController extends Controller
             'sentimen' => $request->sentimen ?? null,
         ]);
 
-        return redirect()->back()->with('success','Laporan berhasil dikirim');
+        return redirect()->back()->with('success','Laporan berhasil dibuat');
     }
+    
+    public function update(Request $request, $id)
+    {
+        $laporan = Laporan::findOrFail($id);
+
+        $gambarPath = $laporan->gambar;
+
+        if ($request->hasFile('gambar')) {
+            if ($laporan->gambar) {
+                Storage::disk('public')->delete($laporan->gambar);
+            }
+            $gambarPath = $request->file('gambar')->store('laporan', 'public');
+        }
+
+        $laporan->update([
+            'judul' => $request->judul,
+            'kontent' => $request->kontent,
+            'gambar' => $gambarPath,
+            'sentimen' => $request->sentimen ?? null,
+        ]);
+
+        return redirect()->back()->with('success','Laporan berhasil diperbarui');
+    }
+
+    public function destroy($id)
+    {
+        $laporan = Laporan::findOrFail($id);
+
+        if ($laporan->gambar) {
+            Storage::disk('public')->delete($laporan->gambar);
+        }
+
+        $laporan->delete();
+        return redirect()->back()->with('success','Laporan berhasil dihapus');
+    }   
 }

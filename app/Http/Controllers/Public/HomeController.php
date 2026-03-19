@@ -11,12 +11,7 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Laporan::latest();
-        if ($request->sentimen && $request->sentimen != 'semua') {
-            $query->where('sentimen', $request->sentimen);
-        }
-
-        $reports = $query->take(5)->get();
+        $reports = Laporan::latest()->take(5)->get();
         $announcement = Pengumuman::latest()->take(3)->get();
         // dd($reports);
         

@@ -1,5 +1,4 @@
 @extends('layouts.public')
-
 @section('content')
 
 <header class="bg-white shadow-sm" style="border-bottom: 1px solid var(--primary-light);">
