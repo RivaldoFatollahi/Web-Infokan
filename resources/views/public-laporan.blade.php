@@ -111,12 +111,11 @@
                 </p>
 
                 <div class="flex items-center gap-2 mt-2">
-                    {{-- <a href="{{ route('reports.show', $report['id']) }}"  --}}
-                    <a href="#" class="btn-primary flex-1 text-sm font-medium text-center no-underline" 
+                    <button onclick="openModalDetail({{ json_encode($report) }})" type="button" class="btn-primary flex-1 text-sm font-medium text-center no-underline" 
                        style="flex: 4;"> 
                         Detail Berita
-                    </a>
-
+                    </button>
+                    
                     <div class="relative action-dropdown" style="flex: 1;">
                         <button onclick="toggleDropdown(this)" 
                                 class="w-full bg-gray-50 hover:bg-gray-100 text-gray-700 py-2 px-2 rounded-lg transition-all duration-300 border border-gray-200 flex items-center justify-center">
@@ -127,19 +126,7 @@
                         
                         <!-- Dropdown Menu -->
                         <div class="absolute right-0 bottom-full mb-2 w-36 bg-white rounded-lg shadow-md py-1 z-10 hidden border">
-                            {{-- <button onclick="openModalEdit({{ $report->id }},  @json($report->judul),  @json($report->kontent), @json($report->gambar ? asset('storage/' . $report->gambar) : null),  @json($report->sentimen))"
-                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#0096D6] hover:text-white flex items-center gap-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                </svg>
-                                Edit
-                            </button> --}}
-                            <button type="button" onclick="openModalEdit(this)"
-                                data-id="{{ $report->id }}"
-                                data-judul="{{ $report->judul }}"
-                                data-kontent="{{ $report->kontent }}"
-                                data-gambar="{{ $report->gambar ? asset('storage/' . $report->gambar) : '' }}"
-                                data-sentimen="{{ $report->sentimen }}"
+                            <button onclick="openModalEdit({{ json_encode($report) }})"
                                 class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#0096D6] hover:text-white flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -190,26 +177,7 @@
 
     <!-- PAGINATION -->
     <div class="flex justify-center mt-10 mb-16">
-        <nav class="flex items-center gap-2" aria-label="Pagination">
-            <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-            </button>
-            
-            <button class="w-10 h-10 flex items-center justify-center rounded-lg text-white" style="background: var(--primary);">1</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">2</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">3</button>
-            <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">4</button>
-            <span class="text-gray-500">...</span>
-            <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">10</button>
-            
-            <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-            </button>
-        </nav>
+        {{ $reports->links() }}
     </div>
 </section>
 
@@ -314,9 +282,9 @@
     </div>
 </div>
 
-<!-- MODAL EDIT -->
-{{-- <x-form-update-laporan /> --}}
+<!-- Modal edit & detail -->
 @include('components.public.form-update-laporan')
+@include('components.public.detail-laporan')
 
 <!-- SCRIPT UNTUK INTERAKSI -->
 <script>
@@ -333,14 +301,12 @@
 
     // Confirm delete
     function confirmDelete(id) {
-        // console.log("KONTOOOLLLL ini btn di klik jiinggg");
+        console.log("KONTOOOLLLL ini btn di klik jiinggg");
         Swal.fire({
             title: 'Yakin mau hapus?',
             text: "Data yang dihapus nggak bisa balik lagi lho!",
             icon: 'warning',
             showCancelButton: true,
-            // confirmButtonColor: '#d33', 
-            // cancelButtonColor: '#0096D6',
             confirmButtonText: 'Ya, Hapus!',
             cancelButtonText: 'Batal',
             customClass: {
@@ -349,7 +315,6 @@
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                // Kalau user klik "Ya, Hapus!", submit form-nya
                 document.getElementById('delete-form-' + id).submit();
             }
         });
@@ -360,7 +325,6 @@
     const laporanCards = document.querySelectorAll('.card-laporan');
     const emptyState = document.getElementById('emptyState');
     const searchInput = document.getElementById('searchInput');
-
     function filterCards() {
         const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
         const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
@@ -403,100 +367,12 @@
             filterCards();
         });
     });
-
     if (searchInput) {
         searchInput.addEventListener('input', filterCards);
     }
-
     filterCards();
 
-    // Open edit modal with data
-    function openModalEdit(button) {
-        // 1. Ambil semua data dari attribute 'data-' si tombol
-        const id = button.getAttribute('data-id');
-        const judul = button.getAttribute('data-judul');
-        const kontent = button.getAttribute('data-kontent');
-        const gambar = button.getAttribute('data-gambar');
-        const sentimen = button.getAttribute('data-sentimen');
-
-        console.log("MANTAP! btn edit di klik. idnya ini: " + id);
-        
-        const modal = document.getElementById('modalEdit');
-        const content = document.getElementById('modalContentEdit');
-        const form = document.getElementById('formEdit');
-
-        // 2. Set Action Form (Sesuaikan dengan route Laravel lo)
-        form.action = `/reports/${id}`;
-
-        // 3. Isi input di dalam modal
-        document.getElementById('editJudul').value = judul;
-        document.getElementById('editKontent').value = kontent;
-        
-        const sentimenInput = document.getElementById('editSentimen');
-        if(sentimenInput) sentimenInput.value = sentimen;
-
-        // 4. Handle preview gambar lama
-        const previewImg = document.getElementById('previewEditImg');
-        const editImgContainer = document.getElementById('editImg');
-        const fileNameText = document.getElementById('fileNameEdit');
-
-        if (gambar && gambar !== '') {
-            previewImg.src = gambar;
-            editImgContainer.classList.remove('hidden');
-            fileNameText.innerText = 'Gambar saat ini: ' + gambar.split('/').pop();
-        } else {
-            editImgContainer.classList.add('hidden');
-            fileNameText.innerText = 'Klik untuk upload gambar';
-        }
-
-        // 5. Tampilkan modal (Logika Tailwind)
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        setTimeout(() => {
-            content.classList.remove('scale-95', 'opacity-0');
-            content.classList.add('scale-100', 'opacity-100');
-        }, 10);
-    }
-
-
-    // Close edit modal
-    function closeModalEdit() {
-        const modal = document.getElementById('modalEdit');
-        const content = document.getElementById('modalContentEdit');
-
-        // animasi keluar
-        content.classList.remove('scale-100', 'opacity-100');
-        content.classList.add('scale-95', 'opacity-0');
-
-        setTimeout(() => {
-            modal.classList.add('hidden');
-
-            // reset gambar preview
-            document.getElementById('editGambar').value = '';
-            document.getElementById('previewEditImg').src = '';
-            document.getElementById('editImg').classList.add('hidden');
-            document.getElementById('fileNameEdit').innerText = 'Klik untuk upload gambar';
-        }, 200);
-    }
-
-    // Preview image before upload in edit modal
-    document.getElementById('editGambar').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            // update nama file
-            document.getElementById('fileNameEdit').innerText = file.name;
-
-            // preview gambar
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('previewEditImg').src = e.target.result;
-                document.getElementById('editImg').classList.remove('hidden');
-            }
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // Modal functions
+    // Add Modal
     function openModal(){
         const modal = document.getElementById('reportModal');
         const modalContent = document.getElementById('modalContent');
@@ -511,6 +387,7 @@
         }, 10);
     }
 
+    // Close Add Modal
     function closeModal(){
         const modal = document.getElementById('reportModal');
         const form = document.getElementById('formReport');
@@ -534,7 +411,7 @@
         }, 300);
     };
 
-    // Preview image before upload
+    // Preview image Add Modal
     const gambarInput = document.getElementById('gambar');
     const previewImg = document.getElementById('previewImg');
     const imagePreview = document.getElementById('imagePreview');
@@ -557,6 +434,148 @@
         });
     }
 
+    // Edit Modal
+    function openModalEdit(report) {
+        const modal = document.getElementById('modalEdit');
+        const content = document.getElementById('modalContentEdit');
+        const form = document.getElementById('formEdit');
+
+        // set action form
+        form.action = `/reports/${report.id}`;
+
+        // isi input
+        document.getElementById('editJudul').value = report.judul ?? '';
+        document.getElementById('editKontent').value = report.kontent ?? '';
+        document.getElementById('editSentimen').value = report.sentimen ?? '';
+
+        // handle gambar lama
+        if (report.gambar) {
+            const imageUrl = `/storage/${report.gambar}`;
+
+            document.getElementById('previewEditImg').src = imageUrl;
+            document.getElementById('editImg').classList.remove('hidden');
+            document.getElementById('fileNameEdit').innerText = 'Gambar saat ini: ' + imageUrl.split('/').pop();
+        } else {
+            document.getElementById('editImg').classList.add('hidden');
+            document.getElementById('previewEditImg').src = '';
+            document.getElementById('fileNameEdit').innerText = 'Klik untuk upload gambar';
+        }
+
+        // reset input file (penting biar ga nyangkut)
+        document.getElementById('editGambar').value = '';
+
+        // tampilkan modal + animasi
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => {
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    // Close Edit Modal
+    function closeModalEdit() {
+        const modal = document.getElementById('modalEdit');
+        const content = document.getElementById('modalContentEdit');
+
+        // animasi keluar
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+
+        setTimeout(() => {
+            modal.classList.add('hidden');
+
+            // reset gambar preview
+            document.getElementById('editGambar').value = '';
+            document.getElementById('previewEditImg').src = '';
+            document.getElementById('editImg').classList.add('hidden');
+            document.getElementById('fileNameEdit').innerText = 'Klik untuk upload gambar';
+        }, 200);
+    }
+
+    // Preview image Edit Modal
+    document.getElementById('editGambar').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // update nama file
+            document.getElementById('fileNameEdit').innerText = file.name;
+
+            // preview gambar
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('previewEditImg').src = e.target.result;
+                document.getElementById('editImg').classList.remove('hidden');
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Detail Modal
+    function openModalDetail(report) {
+        const modal = document.getElementById('detailModal');
+        const modalContent = document.getElementById('detailModalContent');
+        
+        // Set data ke modal
+        document.getElementById('detailJudul').textContent = report.judul ?? '';
+        document.getElementById('detailKontent').textContent = report.kontent ?? '';
+        document.getElementById('detailTanggal').textContent = new Date(report.created_at).toLocaleDateString('id-ID', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        });
+        
+        // Set badge sentimen
+        const sentimenBadge = document.getElementById('detailSentimen');
+        if (report.sentimen === 'positif') {
+            sentimenBadge.textContent = 'Positif';
+            sentimenBadge.className = 'text-xs font-medium px-2 py-1 rounded badge-sentimen badge-positif';
+        } else if (report.sentimen === 'negatif') {
+            sentimenBadge.textContent = 'Negatif';
+            sentimenBadge.className = 'text-xs font-medium px-2 py-1 rounded badge-sentimen badge-negatif';
+        } else {
+            sentimenBadge.textContent = 'Netral';
+            sentimenBadge.className = 'text-xs font-medium px-2 py-1 rounded badge-sentimen badge-netral';
+        }
+        
+        // Set gambar
+        const gambarElement = document.getElementById('detailGambar');
+        const noGambarElement = document.getElementById('detailNoGambar');
+
+       if (report.gambar) {
+            let gambarUrl = `/storage/${report.gambar}`;
+
+            gambarElement.src = gambarUrl;
+            gambarElement.classList.remove('hidden');
+            noGambarElement.classList.add('hidden');
+        } else {
+            gambarElement.classList.add('hidden');
+            noGambarElement.classList.remove('hidden');
+        }
+        
+        // Tampilkan modal dengan animasi
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');        
+        setTimeout(() => {
+            modalContent.classList.remove('scale-95', 'opacity-0');
+            modalContent.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    // Close Detail Modal
+    function closeDetailModal() {
+        const modal = document.getElementById('detailModal');
+        const modalContent = document.getElementById('detailModalContent');
+        
+        // Animasi tutup
+        modalContent.classList.remove('scale-100', 'opacity-100');
+        modalContent.classList.add('scale-95', 'opacity-0');
+        
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }, 300);
+    }
+
     document.addEventListener('click', function(e) {
         if (!e.target.closest('.action-dropdown')) {
             document.querySelectorAll('.action-dropdown > div').forEach(el => {
@@ -569,6 +588,12 @@
         const modal = document.getElementById('modalEdit');
         if (e.target === modal) {
             closeModalEdit();
+        }
+    });
+
+     document.getElementById('detailModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeDetailModal();
         }
     });
 </script>

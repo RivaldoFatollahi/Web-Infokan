@@ -64,7 +64,7 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link href="{{ route('profile.edit') }}" class="no-underline hover:bg-[#0096D6] hover:text-white">
+                            <x-dropdown-link href="{{ route('profile.edit') }}" class="no-underline hover:bg-[#4EB8E5] hover:text-white">
                                 Profile
                             </x-dropdown-link>
 

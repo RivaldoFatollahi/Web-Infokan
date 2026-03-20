@@ -70,4 +70,11 @@ class PublicReportController extends Controller
         $laporan->delete();
         return redirect()->back()->with('success','Laporan berhasil dihapus');
     }   
+
+    public function show($id)
+    {
+        $laporan = Laporan::findOrFail($id);
+
+        
+    }
 }

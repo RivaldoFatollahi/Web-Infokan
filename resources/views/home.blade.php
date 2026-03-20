@@ -22,9 +22,8 @@
 <!-- HERO / PENGUMUMAN - Improved Slider -->
 <section class="max-w-7xl mx-auto mt-8 px-4">
     <div class="relative overflow-hidden rounded-2xl shadow-xl" style="box-shadow: 0 10px 15px -3px rgba(0, 150, 214, 0.2);">
-        <!-- Slider container -->
+        <!-- Slider container -- TAMBAHIN PENGUMUMANNYA TERUS MASUKIN FOTO BUAT TAMPILAN YANG LEBIH BAGUSNYA -->
         <div id="slider" class="flex transition-all duration-700 ease-in-out">
-            
             @forelse ($announcement as $announ )   
             <div class="relative min-w-full">
                 @if ($announ->gambar)
@@ -59,30 +58,6 @@
                 </div>
             </div>
             @endforelse
-
-            <div class="relative min-w-full">
-                <img src="{{ asset('images/trotoarPalembang.jpg') }}" class="w-full h-[400px] object-cover">
-                <div class="absolute inset-0 bg-gradient-to-r from-[#1A4F73] to-transparent"></div>
-                <div class="absolute bottom-0 left-0 p-8 text-white">
-                    <span class="px-3 py-1 rounded-full text-sm font-semibold mb-3 inline-block" style="background-color: var(--primary);">
-                        Info Terkini
-                    </span>
-                    <h3 class="text-3xl font-bold mb-2">Laporkan Masalah di Sekitarmu</h3>
-                    <p class="text-lg opacity-90 mb-0">Setiap laporan akan segera ditindaklanjuti</p>
-                </div>
-            </div>
-            
-            <div class="relative min-w-full">
-                <img src="{{ asset('images/trotoarPalembang.jpg') }}" class="w-full h-[400px] object-cover">
-                <div class="absolute inset-0 bg-gradient-to-r from-[#1A4F73] to-transparent"></div>
-                <div class="absolute bottom-0 left-0 p-8 text-white">
-                    <span class="px-3 py-1 rounded-full text-sm font-semibold mb-3 inline-block" style="background-color: var(--primary);">
-                        Kolaborasi
-                    </span>
-                    <h3 class="text-3xl font-bold mb-2">Bersama Membangun Kota</h3>
-                    <p class="text-lg opacity-90 mb-0">Partisipasi aktif warga untuk perubahan</p>
-                </div>
-            </div>
         </div>
 
         <!-- Slider dots -->
@@ -106,7 +81,7 @@
     </div>
 </section>
 
-<!-- LAPORAN WARGA - Improved Cards -->
+<!-- LAPORAN WARGA -->
 <section class="max-w-7xl mx-auto mt-12 px-4">
     <div class="flex justify-between items-center mb-6">
         <div class="flex items-center gap-3">
@@ -137,75 +112,72 @@
     </div>
 
     <div class="grid md:grid-cols-3 gap-6">
-        {{-- apus forloopnya kalo datanya udah banyak, ini buat liat btn Load All --}}
-        @for ($i = 1; $i <= 9; $i++)
-            @forelse($reports as $report)
-            <div class="card-laporan bg-white rounded-xl overflow-hidden" data-sentimen="{{ $report->sentimen }}">
-                <div class="relative">
-                    @if($report->gambar)
-                        <img src="{{ asset('storage/' . $report->gambar) }}" 
-                            class="w-full h-48 object-cover">
+        @forelse($reports as $report)
+        <div class="card-laporan bg-white rounded-xl overflow-hidden" data-sentimen="{{ $report->sentimen }}">
+            <div class="relative">
+                @if($report->gambar)
+                    <img src="{{ asset('storage/' . $report->gambar) }}" 
+                        class="w-full h-48 object-cover">
+                @else
+                    <div class="w-full h-48 bg-gray-100 flex items-center justify-center">
+                        <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                @endif
+            </div>
+            
+            <!-- Content -->
+            <div class="p-3">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xs font-medium px-2 py-1 rounded" 
+                        style="background-color: var(--primary-light); color: var(--white);">
+                        Laporan Warga
+                    </span>
+
+                    @if($report->sentimen == 'positif')
+                        <span class="text-xs font-medium px-2 py-1 rounded badge-sentimen badge-positif">
+                            Positif
+                        </span>
+                    @elseif($report->sentimen == 'negatif')
+                        <span class="text-xs font-medium px-2 py-1 rounded badge-sentimen badge-negatif">
+                            Negatif
+                        </span>
                     @else
-                        <div class="w-full h-48 bg-gray-100 flex items-center justify-center">
-                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
+                        <span class="text-xs font-medium px-2 py-1 rounded badge-sentimen badge-netral">
+                            Netral
+                        </span>
                     @endif
+
+                    <span class="text-xs text-gray-400">
+                        {{ $report->created_at->format('d M Y') }}
+                    </span>
                 </div>
                 
-                <!-- Content -->
-                <div class="p-3">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="text-xs font-medium px-2 py-1 rounded" 
-                            style="background-color: var(--primary-light); color: var(--white);">
-                            Laporan Warga
-                        </span>
-
-                        @if($report->sentimen == 'positif')
-                            <span class="text-xs font-medium px-2 py-1 rounded badge-sentimen badge-positif">
-                                Positif
-                            </span>
-                        @elseif($report->sentimen == 'negatif')
-                            <span class="text-xs font-medium px-2 py-1 rounded badge-sentimen badge-negatif">
-                                Negatif
-                            </span>
-                        @else
-                            <span class="text-xs font-medium px-2 py-1 rounded badge-sentimen badge-netral">
-                                Netral
-                            </span>
-                        @endif
-
-                        <span class="text-xs text-gray-400">
-                            {{ $report->created_at->format('d M Y') }}
-                        </span>
-                    </div>
-                    
-                    <!-- Judul -->
-                    <h4 class="font-semibold text-gray-800 mb-2 line-clamp-2">
-                        {{ $report->judul }}
-                    </h4>
-                    
-                    <!-- Konten -->
-                    <p class="text-gray-600 text-sm mb-3 line-clamp-2" title="{{ $report->kontent }}">
-                        {{ Str::limit($report->kontent, 80) }}
-                    </p>
-                </div>
+                <!-- Judul -->
+                <h4 class="font-semibold text-gray-800 mb-2 line-clamp-2">
+                    {{ $report->judul }}
+                </h4>
+                
+                <!-- Konten -->
+                <p class="text-gray-600 text-sm mb-3 line-clamp-2" title="{{ $report->kontent }}">
+                    {{ Str::limit($report->kontent, 80) }}
+                </p>
             </div>
-            @empty
-            <div class="col-span-3">
-                <div class="bg-gray-50 rounded-lg p-12 text-center">
-                    <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    <p class="text-gray-500 text-lg mb-2">Belum ada laporan warga</p>
-                    <p class="text-gray-400 text-sm">Jadilah yang pertama membuat laporan</p>
-                </div>
+        </div>
+        @empty
+        <div class="col-span-3">
+            <div class="bg-gray-50 rounded-lg p-12 text-center">
+                <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <p class="text-gray-500 text-lg mb-2">Belum ada laporan warga</p>
+                <p class="text-gray-400 text-sm">Jadilah yang pertama membuat laporan</p>
             </div>
-            @endforelse
-        @endfor
+        </div>
+        @endforelse
     </div>
 
     <!-- EMPTY STATE UNTUK FILTER -->
@@ -334,6 +306,73 @@
 
 <!-- SCRIPT - Improved -->
 <script>
+    // See All Reports Button
+    const loadBtn = document.getElementById('loadAllBtn');
+    const cards = document.querySelectorAll('.card-laporan');
+    const gridReport = document.querySelector('.grid');
+    const emptyState = document.getElementById('emptyState');
+    let visibleCount = 3;
+    let currentFilter = 'semua';
+    let expand = false;
+    function updateCards() {
+        let filteredCards = [];
+
+        cards.forEach(card => {
+            const sentimen = card.dataset.sentimen;
+
+            if (currentFilter === 'semua' || sentimen === currentFilter) {
+                filteredCards.push(card);
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        filteredCards.forEach((card, index) => {
+            if (!expand) {
+                card.style.display = index < visibleCount ? 'block' : 'none';
+            } else {
+                card.style.display = 'block';
+            }
+        });
+
+        // EMPTY STATE
+        if (filteredCards.length === 0) {
+            emptyState.classList.remove('hidden');
+        } else {
+            emptyState.classList.add('hidden');
+        }
+
+        // UPDATE BUTTON TEXT
+        if (expand || visibleCount >= filteredCards.length) {
+            loadBtn.textContent = "Muat Lebih Sedikit";
+            expand = true;
+        } else {
+            loadBtn.textContent = "Muat Lebih Banyak";
+            expand = false;
+        }
+    }
+    updateCards();
+    loadBtn.addEventListener('click', () => {
+        let filteredTotal = [...cards].filter(card => {
+            const sentimen = card.dataset.sentimen;
+            return currentFilter === 'semua' || sentimen === currentFilter;
+        }).length;
+
+        if (expand || visibleCount >= filteredTotal) {
+            visibleCount = 3;
+            expand = false;
+
+            window.scrollTo({
+                top: gridReport.offsetTop - 120,
+                behavior: "smooth"
+            });
+        } else {
+            visibleCount += 3;
+        }
+
+        updateCards();
+    });
+
     // Modal functions
     function openModal(){
         const modal = document.getElementById('reportModal');
@@ -421,7 +460,6 @@
     // Filter Buttons
     const filterButtons = document.querySelectorAll('.filter-btn');
     const laporanCards = document.querySelectorAll('.card-laporan');
-    const emptyState = document.getElementById('emptyState');
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
             const filter = button.dataset.filter;
@@ -449,10 +487,14 @@
 
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
+            currentFilter = button.dataset.filter;
+            visibleCount = 3;
+            expand = false;
 
             filterButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
 
+            updateCards();
         });
     });
 
@@ -489,40 +531,6 @@
             }
         });
     }
-
-    // See All Reports Button
-    const loadBtn = document.getElementById('loadAllBtn');
-    const cards = document.querySelectorAll('.card-laporan');
-    const gridReport = document.querySelector('.grid');
-    const visible = 3;
-    let expand = false;   
-
-    function updateCards() {
-        cards.forEach((card, index) => {
-            if(!expand){
-                card.style.display = index < visible ? "block" : "none";
-            }else{
-                card.style.display = "block";
-            }
-        });
-    }
-
-    updateCards();
-    loadBtn.addEventListener('click', () => {
-        expand = !expand;
-
-        if(expand){
-            loadBtn.textContent = "Muat Lebih Sedikit";
-        }else{
-            loadBtn.textContent = "Muat Lebih Banyak";
-            window.scrollTo({
-                top: gridReport.offsetTop - 120,
-                behavior: "smooth"
-            });
-        }
-        updateCards();
-    });
-
 
     // Close modal when clicking outside
     document.getElementById('reportModal').addEventListener('click', function(e) {
