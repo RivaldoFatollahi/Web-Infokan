@@ -25,4 +25,10 @@ class Laporan extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+
+    public function replies()
+    {
+        return $this->hasMany(ReportReply::class, 'id_laporan')
+            ->whereNull('parent_id');
+    }
 }

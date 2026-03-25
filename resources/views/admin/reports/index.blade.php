@@ -27,7 +27,7 @@
                             <th>Pelapor</th>
                             <th>Status</th>
                             <th>Tanggal</th>
-                            <th width="150">Aksi</th>
+                            {{-- <th width="150">Aksi</th> --}}
                         </tr>
                     </thead>
 
@@ -36,7 +36,12 @@
                         @forelse($reports ?? [] as $report)
                             <tr>
                                 <td>{{ $report->judul }}</td>
-                                <td>{{ $report->kontent }}</td>
+                                <td>
+                                    <a href="{{ route('admin.reports.show', $report->id) }}"
+                                        class="btn btn-info btn-sm">
+                                        {{ $report->kontent }}
+                                    </a>
+                                </td>
                                 <td>{{ $report->user->nama ?? '-' }}</td>
                                 <td>
                                     <span class="badge bg-warning">
@@ -45,15 +50,15 @@
                                 </td>
                                 <td>{{ $report->created_at->format('d M Y') }}</td>
 
-                                <td>
-                                    <a href="" class="btn btn-primary btn-sm">
-                                        Balas
-                                    </a>
+                                {{-- <td> --}}
+                                    {{-- <button onclick="replyComment({{ $report->id }})" class="btn btn-primary btn-sm"> --}}
+                                        {{-- Balas --}}
+                                    {{-- </button> --}}
 
                                     {{-- <a href="" class="btn btn-sm btn-danger">
                                         Hapus
                                     </a> --}}
-                                </td>
+                                {{-- </td> --}}
                             </tr>
                         @empty
                             <tr>
@@ -69,4 +74,33 @@
         </div>
 
     </div>
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            function replyComment(idLaporan, parentId = null) {
+                Swal.fire({
+                    title: 'Balas Laporan',
+                    input: 'textarea',
+                    inputPlaceholder: 'Tulis balasan...',
+                    showCancelButton: true
+                }).then(result => {
+                    if (result.isConfirmed) {
+
+                        fetch('/admin/reports/reply', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                report_id: idLaporan,
+                                parent_id: parentId,
+                                message: result.value
+                            })
+                        }).then(() => location.reload());
+                    }
+                });
+            }
+        </script>
+    @endpush
 </x-app-layout>
