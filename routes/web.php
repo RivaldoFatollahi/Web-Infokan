@@ -30,6 +30,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('/houses', HouseController::class)->names('houses');
     Route::resource('/users', UserController::class)->names('users');
     Route::resource('/reports', ReportController::class)->names('reports');
+    Route::post('/reports/reply', [ReportController::class, 'storeReply'])
+    ->name('reports.reply');
+    Route::get('/reports/{id}', [ReportController::class, 'show'])->name('reports.show');
 });
 
 require __DIR__ . '/auth.php';
